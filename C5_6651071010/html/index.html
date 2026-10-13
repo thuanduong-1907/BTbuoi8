@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tech Gear - shop phụ kiện điện thoại mini với giỏ hàng Vue.js">
+  <title>Tech Gear - Phụ kiện điện thoại</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="app">
+  <!-- HEADER tĩnh; riêng số lượng giỏ hàng do Vue quản lý bằng {{ }} -->
+  <header class="bg-white border-bottom sticky-top">
+    <nav class="container d-flex flex-wrap justify-content-between align-items-center py-3 gap-2">
+      <a class="fs-4 fw-bold text-primary text-decoration-none" href="#">Tech Gear</a>
+      <ul class="nav">
+        <li class="nav-item"><a class="nav-link" href="#">Trang chủ</a></li>
+        <li class="nav-item"><a class="nav-link" href="#san-pham">Sản phẩm</a></li>
+        <li class="nav-item"><a class="nav-link" href="#khuyen-mai">Khuyến mãi</a></li>
+        <li class="nav-item"><a class="nav-link" href="#lien-he">Liên hệ</a></li>
+      </ul>
+      <span class="badge text-bg-primary fs-6">&#128722; Giỏ hàng ({{ cartCount }})</span>
+    </nav>
+  </header>
+
+  <main class="container py-4">
+    <div class="row g-4">
+      <!-- Cột chính: tìm kiếm + danh sách sản phẩm -->
+      <section id="san-pham" class="col-lg-8">
+        <input type="text" class="form-control mb-3" v-model="tuKhoa" placeholder="Tìm sản phẩm...">
+        <p v-if="danhSachLoc.length === 0" class="text-muted">Không tìm thấy sản phẩm phù hợp.</p>
+        <div class="row g-3">
+          <div class="col-6 col-md-4 col-xl-3" v-for="sp in danhSachLoc" :key="sp.id">
+            <article class="card h-100 shadow-sm">
+              <img :src="sp.anh" :alt="sp.ten" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h3 class="card-title fs-6">{{ sp.ten }}</h3>
+                <p class="card-text small text-muted">{{ sp.moTa }}</p>
+                <div class="mt-auto d-flex justify-content-between align-items-center">
+                  <strong class="text-primary small">{{ dinhDangGia(sp.gia) }}</strong>
+                  <button class="btn btn-primary btn-sm" @click="themVaoGio(sp)">Thêm vào giỏ</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ASIDE giỏ hàng -->
+      <aside class="col-lg-4">
+        <div class="card shadow-sm sticky-top" style="top: 80px">
+          <div class="card-body">
+            <h2 class="fs-5">Giỏ hàng của bạn</h2>
+            <p v-if="cart.length === 0" class="text-muted mb-0">Giỏ hàng trống</p>
+            <ul v-else class="list-group list-group-flush mb-2">
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0" v-for="(sp, index) in cart" :key="index">
+                <span class="small">{{ sp.ten }}<br><span class="text-muted">{{ dinhDangGia(sp.gia) }}</span></span>
+                <button class="btn btn-outline-danger btn-sm" @click="xoaKhoiGio(index)">Xoá</button>
+              </li>
+            </ul>
+            <div class="d-flex justify-content-between fw-bold border-top pt-2">
+              <span>Tổng tiền</span><span class="text-primary">{{ dinhDangGia(tongTien) }}</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Khuyến mãi (tĩnh) -->
+  <section id="khuyen-mai" class="promo text-white text-center py-4">
+    <h2 class="fs-4 mb-1">Giảm 20% tất cả ốp lưng - số lượng có hạn!</h2>
+    <p class="mb-0">Miễn phí vận chuyển cho đơn từ 500.000 VND.</p>
+  </section>
+
+  <footer id="lien-he" class="bg-dark text-light py-4">
+    <div class="container row mx-auto g-3">
+      <div class="col-md-4"><h3 class="fs-6">Liên hệ</h3><p class="small mb-0">123 Đường Công Nghệ, TP.HCM<br>0901 234 567</p></div>
+      <div class="col-md-4"><h3 class="fs-6">Mạng xã hội</h3><p class="small mb-0">Facebook · Instagram · YouTube</p></div>
+      <div class="col-md-4"><p class="small mb-0">&copy; 2026 Tech Gear. All rights reserved.</p></div>
+    </div>
+  </footer>
+</div>
+
+<!-- Thứ tự bắt buộc: Vue CDN trước, app.js sau -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="../js/app.js"></script>
+</body>
+</html>
